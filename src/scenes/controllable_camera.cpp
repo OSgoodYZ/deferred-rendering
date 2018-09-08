@@ -50,24 +50,24 @@ void scene::ControllableCamera::update(float dt)
     // movement controller
     auto app = App::instance();
     // run
-    auto acc_coef = app->keyPressed(runModifierKey()) ? runningAccel() : 1.f;
+    auto acc_coef = app->keyTriggered(runModifierKey()) ? runningAccel() : 1.f;
     // for/backward
-    if (app->keyTriggered(forwardKey()) && !app->keyTriggered(backwardKey()))
+    if (app->keyPressed(forwardKey()) && !app->keyPressed(backwardKey()))
         camera().translate(camera().forward() * (forwardSpeed() * acc_coef * dt));
-    else if (app->keyTriggered(backwardKey()) && !app->keyTriggered(forwardKey()))
+    else if (app->keyPressed(backwardKey()) && !app->keyPressed(forwardKey()))
         camera().translate(camera().forward() * (-backwardSpeed() * acc_coef * dt));
     // left/right sidestep
-    if (app->keyTriggered(sidestepLeftKey()) && !app->keyTriggered(sidestepRightKey()))
+    if (app->keyPressed(sidestepLeftKey()) && !app->keyPressed(sidestepRightKey()))
         camera().translate(camera().strafe() * (sidestepSpeed()* acc_coef * dt));
-    else if (app->keyTriggered(sidestepRightKey()) && !app->keyTriggered(sidestepLeftKey()))
+    else if (app->keyPressed(sidestepRightKey()) && !app->keyPressed(sidestepLeftKey()))
         camera().translate(camera().strafe() * (-sidestepSpeed() * acc_coef * dt));
     // left/right turn
-    if (app->keyTriggered(turnLeftKey()) && !app->keyTriggered(turnRightKey()))
+    if (app->keyPressed(turnLeftKey()) && !app->keyPressed(turnRightKey()))
         camera().yaw(camera().yaw() - turnSpeed()*dt);
-    else if (app->keyTriggered(turnRightKey()) && !app->keyTriggered(turnLeftKey()))
+    else if (app->keyPressed(turnRightKey()) && !app->keyPressed(turnLeftKey()))
         camera().yaw(camera().yaw() + turnSpeed()*dt);
     // up
-    if (app->keyTriggered(upKey()) || app->keyTriggered(upKey()))
+    if (app->keyPressed(upKey()) || app->keyPressed(upKey()))
         camera().translate(camera().up() * (upSpeed()*dt));
 
     if (mouseControl())

@@ -101,23 +101,23 @@ void scene::DeferredRenderBenchmark::resize(unsigned int width, unsigned int hei
 void scene::DeferredRenderBenchmark::update(float dt)
 {
     auto app = App::instance();
-    if (app->keyPressed(App::Key::P))
+    if (app->keyTriggered(App::Key::P))
     {
         if (!pause) app->showCursor(true);
         else app->showCursor(false);
         pause = !pause;
     }
-    if (app->keyPressed(App::Key::M))
+    if (app->keyTriggered(App::Key::M))
         deferred_rendering_flag = !deferred_rendering_flag;
-    if (app->keyPressed(App::Key::O))
+    if (app->keyTriggered(App::Key::O))
         display_spheres = !display_spheres;
-    if (app->keyPressed(App::Key::L))
+    if (app->keyTriggered(App::Key::L))
         show_light_sources = !show_light_sources;
-    if (app->keyPressed(App::Key::F))
+    if (app->keyTriggered(App::Key::F))
         app->setFullscreen(!app->fullscreen());
-    if (app->keyPressed(App::Key::B))
+    if (app->keyTriggered(App::Key::B))
         resetCamera();
-    if (app->keyPressed(App::Key::N) && deferred_rendering_flag)
+    if (app->keyTriggered(App::Key::N) && deferred_rendering_flag)
     {
         if (show_only < -1) show_only = -1;
         show_only += 1;
@@ -530,7 +530,7 @@ void scene::DeferredRenderBenchmark::Floor::render(Shader *shader)
     shader->set("material.displace_scale", 0.f);
     shader->set("material.displace_mid", 0.5f);
 
-    auto model = glm::scale(glm::translate(glm::mat4(), position()), scale());
+    auto model = glm::scale(glm::translate(glm::mat4(1.f), position()), scale());
     shader->set("model", model);
 
     glBindVertexArray(vao);
@@ -700,7 +700,7 @@ void scene::DeferredRenderBenchmark::Spheres::render(Shader *shader)
 
     for (const auto &p : position)
     {
-        auto model = glm::translate(glm::mat4(), p);
+        auto model = glm::translate(glm::mat4(1.f), p);
         shader->set("model", model);
         glDrawElements(GL_TRIANGLES, n_indices_, GL_UNSIGNED_SHORT, nullptr);
     }

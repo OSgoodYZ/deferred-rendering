@@ -1,4 +1,4 @@
-#define ASSET_PATH "/home/xupei0610/Src/code/assets"
+#define ASSET_PATH "/home/xupei0610/Src/CPSC817/HW1/assets"
 
 /* #undef INIT_LIGHT_NUM */
 

@@ -65,7 +65,7 @@ void App::init(bool fullscreen)
     static auto keypress_callback = [](GLFWwindow* win, int key, int, int action, int mods)
     {
         if (win == App::instance()->window)
-            App::instance()->updateKeyPressedCondition(key, action);
+            App::instance()->updatekeyTriggeredCondition(key, action);
 
     };
     static auto scroll_callback = [](GLFWwindow *win, double x_offset, double y_offset)
@@ -78,7 +78,7 @@ void App::init(bool fullscreen)
     if (window) glfwDestroyWindow(window);
 
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-#ifdef USE_MSAA
+#ifndef NO_MSAA
     glfwWindowHint(GLFW_SAMPLES, 16);
 #endif
 
@@ -92,7 +92,7 @@ void App::init(bool fullscreen)
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK) error("Failed to initialize GLEW.");
     glEnable(GL_DEPTH_TEST);
-#ifdef USE_MSAA
+#ifndef NO_MSAA
     glEnable(GL_MULTISAMPLE);
 #endif
     glDepthFunc(GL_LESS);
@@ -102,7 +102,12 @@ void App::init(bool fullscreen)
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, cursor_position_callback);
     glfwSetKeyCallback(window, keypress_callback);
-    glfwSetScrollCallback(window, scroll_callback);
+    glfwSetScrollCallback(window, [](GLFWwindow *win, double x_offset, double y_offset)
+    {
+        if (win == App::instance()->window)
+            App::instance()->updateScrollOffset(static_cast<float>(x_offset),
+                                                static_cast<float>(y_offset));
+    });
 
     time_gap = -1;
     fps_ = 0;
@@ -223,7 +228,7 @@ void App::pollEvents()
     updateTimeGap();
     glfwPollEvents();
 
-    if (keyTriggered(Key::Escape))
+    if (keyPressed(Key::Escape))
         glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
 
@@ -281,7 +286,7 @@ void App::updateCursorPosition(float x, float y)
     cursor_position_.y = y;
 }
 
-void App::updateKeyPressedCondition(int glfw_key, int glfw_action)
+void App::updatekeyTriggeredCondition(int glfw_key, int glfw_action)
 {
 
     current_key_pressed_[glfw_key] = glfw_action != GLFW_RELEASE;
@@ -293,7 +298,7 @@ void App::updateScrollOffset(float x_offset, float y_offset)
     scroll_offset_.y = y_offset;
 }
 
-bool App::keyPressed(Key key)
+bool App::keyTriggered(Key key)
 {
     return current_key_pressed_[static_cast<int>(key)] && !last_key_pressed_[static_cast<int>(key)];
 }
@@ -303,7 +308,7 @@ bool App::keyHold(Key key)
     return current_key_pressed_[static_cast<int>(key)] && last_key_pressed_[static_cast<int>(key)];
 }
 
-bool App::keyTriggered(Key key)
+bool App::keyPressed(Key key)
 {
     return current_key_pressed_[static_cast<int>(key)];
 }

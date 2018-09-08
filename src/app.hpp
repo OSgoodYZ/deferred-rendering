@@ -78,9 +78,9 @@ public:
     inline bool fullscreen() const noexcept { return fullscreen_; }
     inline std::shared_ptr<Scene> scene() { return scene_; }
 
-    bool keyPressed(Key key);
-    bool keyHold(Key key);
     bool keyTriggered(Key key);
+    bool keyHold(Key key);
+    bool keyPressed(Key key);
     bool mouseButtonPressed(MouseButton btn);
     inline glm::vec2 const &cursorPosition() { return cursor_position_; }
     inline glm::vec2 const &scrollOffset() { return scroll_offset_; }
@@ -95,7 +95,7 @@ protected:
     virtual void updateWindowSize(int width, int height);
     virtual void updateFramebufferSize(int width, int height);
     virtual void updateCursorPosition(float x, float y);
-    virtual void updateKeyPressedCondition(int glfw_key, int glfw_action);
+    virtual void updatekeyTriggeredCondition(int glfw_key, int glfw_action);
     virtual void updateScrollOffset(float x_offset, float y_offset);
 
 protected:
